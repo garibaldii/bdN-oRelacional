@@ -1,0 +1,54 @@
+use('DadosGeo');
+
+
+db.estados.find({longitude: {$lt: -63}}, {_id:1, nome:1, longitude:1})//Listar a UF, nome e longitude de todos os estados com a longitude menor que -63 "$lt"
+
+use('DadosGeo');
+db.estados.find({codigo_uf: {$gte:10, $lte:20}}, {_id:0, uf:1, codigo_uf: 1, nome: 1})
+
+
+use('DadosGeo')
+db.estados.find({$and: 
+                [
+                    { codigo_uf: {$gte: 10} },
+                    { codigo_uf: {$lte: 20} }
+                ]},
+                {_id:0, uf:1, codigo_uf: 1, nome: 1});
+//vai mostrar a qtd de estados cujo o código é maior ou igual a 10 E menor ou igual a 20
+
+
+//retorne todos os estados cujo nome comeca com "rio" sem sensibilidade de caso
+//e retorne em ordem alfabética. 
+use('DadosGeo')
+db.estados.find({nome: /^rio/i}, 
+                {codigo_uf: 1, nome: 1}).sort({nome: 1})
+
+//retorne todos os municípios que contenham o noe no nome Itu, retornando em ordem alfabética
+use('DadosGeo');
+db.municipios.find({nome: /^itu/i},
+                    {_id: 0, nome: 1}).sort({nome: 1}).skip(5).limit(1) //Limitar a quantidade a ser exibida no find pulando so 5 iniciais
+
+
+
+//listando todoss os municipios pertencentes a uma UF
+use('DadosGeo')
+db.municipios.aggregate([{ //procurar uma informação comum entre collections (chave primária e estrangeira) procurar e agregar os dados. 
+    $lookup: {
+      from: 'municipios',
+      localField: 'codigo_uf',
+      foreignField: 'codigo_uf',
+      as: 'listaMunicipios'
+    },
+}, 
+])
+
+use('DadosGeo')//cada municipio agregue a informação do estado
+db.municipios.aggregate([{ 
+    $lookup: {
+      from: 'estados',
+      localField: 'codigo_uf',
+      foreignField: 'codigo_uf',
+      as: 'detalheEstado'
+    },
+}, 
+])
