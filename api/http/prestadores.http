@@ -1,0 +1,49 @@
+//TESTE DA API REST DE PRESTADORESSSSS
+
+@baseURL = http://localhost:4000/api/prestadores
+
+GET {{baseURL}}?limit=3&skip=0
+Content-Type: application/json
+
+###
+//GET - Lista o prestador pelo ID
+GET {{baseURL}}/id/65f8c857ac5037859633fb5b
+Content-Type: application/json
+
+###
+//GET - Lista o prestador pela razão social ou fantasia
+GET {{baseURL}}/razao/boy
+Content-Type: application/json
+
+
+###
+//DELETE - Remove o prestador pelo id
+DELETE {{baseURL}}/65f8c857ac5037859633fb5b
+Content-Type: application/json
+
+###
+//POST - Insere um novo prestador
+POST {{baseURL}}
+Content-Type: application/json
+
+{
+    "cnpj": "45190324000150",
+    "razao_social": "SERVICOS MOTOBOY 2 LTDA.",
+    "cep": "123123",
+    "endereco": {
+
+        "logradouro": "Av. Presidente Kennedy, 321",
+        "complemento": "",
+        "bairro": "Centro",
+        "localidade": "Votorantim",
+        "uf": "SP"
+    
+    },
+    "cnae_fiscal": 451510,
+    "nome_fantasia": "ZÉ MOTOBOY",
+    "data_inicio_atividade": "2022-07-22",
+    "localizacao": {
+        "type": "Point",
+        "coordinates": [-23.2904, -47.2963]
+    }
+}
